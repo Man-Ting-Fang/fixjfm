@@ -1,0 +1,267 @@
+
+
+% fixjfm-doc.tex
+
+% !TeX encoding = UTF-8
+% !TeX program  = pdfLaTeX
+
+\RequirePackage{fix-cm}
+
+\documentclass[a4paper]{article}
+
+\usepackage{amsfonts}
+\usepackage[OT1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[UKenglish]{babel}
+\usepackage[babel]{microtype}
+\usepackage{etoolbox}
+\usepackage{booktabs}
+
+\AtBeginEnvironment{verbatim}{\microtypesetup{activate=false}}
+
+\newcommand\NormalSans{\normalfont\sffamily}
+\newcommand\pkg[1]{{\protect\NormalSans#1}}
+
+\newcommand\pTeX{p\kern-0.15em\TeX}
+\newcommand\e{\ensuremath{\varepsilon}}
+\newcommand\epTeX{\e-\pTeX}
+\newcommand\ApTeX{A\kern-0.1em\pTeX}
+\newcommand\pLaTeX{p\LaTeX}
+
+\newcommand\FwBox{\ensuremath{\square}\hskip0em plus 0.05em\relax}
+
+\newbox\fwbox
+\setbox\fwbox=\hbox{\FwBox}
+
+\newcommand\TwoFwBoxes{\FwBox\FwBox}
+\newcommand\FourFwBoxes{\TwoFwBoxes\TwoFwBoxes}
+
+\newcommand\DemoText{%
+  \FourFwBoxes\FourFwBoxes\FourFwBoxes\FourFwBoxes
+  \FourFwBoxes\FourFwBoxes\ensuremath{\square}}
+
+\newcommand\demotext[1]{%
+  \begin{minipage}{20\wd\fwbox}\centering
+    \fbox{\begin{minipage}{16\wd\fwbox}%
+      \hskip2\wd\fwbox\relax\DemoText\par
+      \leavevmode\hbox to#1\wd\fwbox{\hss``}\DemoText''\par
+      \hskip2\wd\fwbox\relax\DemoText\par
+    \end{minipage}}%
+  \end{minipage}}
+
+\newcommand\yes{yes}
+\newcommand\no{no}
+
+\newcommand\eclmvtt{test}
+
+\font\eclmvtt=ec-lmvtt10 at 10pt
+
+\newcommand\demoinput[2]{\TwoFwBoxes
+  \hbox to 1\wd\fwbox{\texttt{,}\hss}#1%
+  \hbox to 1\wd\fwbox{\hss{\eclmvtt``}}\TwoFwBoxes
+  \hbox to 1\wd\fwbox{{\eclmvtt''}\hss}#2}
+
+\newcommand\demooutput[2]{%
+  \TwoFwBoxes\hbox to#1\wd\fwbox{,\hss{#2``}}\TwoFwBoxes{#2''}}
+
+\newcommand\sans{test}
+
+\font\sans=SourceSansPro-Semibold-tlf-ot1 at 10pt
+
+\begin{document}
+
+\title{The \pkg{fixjfm} package%
+  \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
+  \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
+\author{Yue \textsc{Zhang}}
+\date{2017-09-02\quad v0.2}
+
+\maketitle
+
+\begin{abstract}
+This package fixes several bugs in the JFM format.
+\end{abstract}
+
+\section{Introduction}
+
+The JFM format is an extension of the TFM format and is used for typesetting CJK
+characters with *\pTeX. It works perfectly under almost all circumstances, but
+there are still at least two bugs:
+\begin{itemize}
+\item Bug 1: the indentation is incorrect if the first character of a paragraph
+  is an opening fullwidth punctuation mark, see Figure \ref{fig:ind};
+\item Bug 2: the spacing between two consecutive fullwidth punctuation marks
+  cannot be adjusted if the font is changed there, see Table \ref{tab:adj}.
+\end{itemize}
+\begin{figure}[ht]\centering
+\demotext{3}\demotext{2.5}
+\caption{Comparison of the indentation produced without this package (left) and
+  with this package (right)}
+\label{fig:ind}
+\end{figure}
+\vskip-20pt\relax
+\begin{table}[ht]\centering
+\caption{Comparison of the adjustment of the spacing between two consecutive
+  fullwidth punctuation marks}
+\label{tab:adj}
+\medskip
+\begin{tabular}{ccll}
+\toprule
+Font change & This package        & Input          & Output                  \\
+\midrule
+\no         & either \no\ or \yes & \demoinput{}{} & \demooutput{1.5}{}      \\
+\yes        & \no                 & \demoinput{\texttt{\char"5C textgt%
+                                      \char"7B}}{\texttt{\char"7D}}
+                                                   & \demooutput{2}{\sans}   \\
+\yes        & \yes                & \demoinput{\texttt{\char"5C textgt%
+                                      \char"7B}}{\texttt{\char"7D}}
+                                                   & \demooutput{1.5}{\sans} \\
+\bottomrule
+\end{tabular}
+\end{table}
+It seems that macro is the easiest solution to these problems. However, the
+second bug can only be fixed when using \e-(u)\pTeX\ (under most, but not all
+circumstances), because the primitive \verb|\lastnodechar| which is introduced
+by \epTeX\ is required. Anyhow, using this package with \pTeX\ or any one of its
+derivatives does not hurt. Please also keep in mind that owing to technical
+limitations, this package is not a panacea.
+
+There is also another improvement: \verb|\leavevmode| is redefined as
+\verb|\quitvmode| if the latter is available as a primitive (among all *\pTeX\
+engines to date, only \ApTeX\ has \verb|\quitvmode|). So after loading this
+package, you can always use \verb|\leavevmode| and need not worry about
+\verb|\quitvmode|. If you are wondering about what the difference between them
+is, please see \textit{The pdf\TeX\ user manual}.
+
+\section{Basic usage}
+
+This package has no options. It is recommended that this package should be
+loaded before any other packages. If you are using \LaTeX, load this package at
+the beginning of your preamble:
+\begin{verbatim}
+    \documentclass...
+    \usepackage{fixjfm}
+\end{verbatim}
+or even before \verb|\documentclass| (use \verb|\RequirePackage| instead):
+\begin{verbatim}
+    \RequirePackage{fixjfm}
+    \documentclass...
+\end{verbatim}
+If you are using plain \TeX, put the following line near the beginning of your
+\verb|.tex| file:
+\begin{verbatim}
+    \input fixjfm.sty
+\end{verbatim}
+
+After loading this package, the first bug mentioned above can be automatically
+fixed under most (but not all) circumstances. If you find that it cannot be
+fixed somewhere, you can add \verb|\<| manually before the opening fullwidth
+punctuation mark which begins the paragraph.
+
+In the case of the second bug mentioned above, the situation is different. If
+you are using \LaTeX, \verb|\textmc| and \verb|\textgt| are redefined by default
+so that the bug can be automatically fixed (again, under most, but not all
+circumstances). However, \verb|\mcfamily| and \verb|\gtfamily| remain unchanged.
+The difference here is similar to that between, say, \verb|\textit| and
+\verb|\itshape|: \verb|\textit| automatically takes care of any necessary italic
+correction on either side of the argument, while \verb|\itshape| does nothing
+about that. Just like \verb|\itshape| and \verb|\/|, you should add
+\begin{verbatim}
+    \fixjfmspacing
+\end{verbatim}
+by yourself after the font change that appears between two consecutive fullwidth
+punctuation marks. For example:
+\begin{trivlist}\item\relax{\ttfamily\hskip2em}\TwoFwBoxes
+\hbox to 1\wd\fwbox{\texttt{,}\hss}\verb|{\gtfamily\fixjfmspacing|%
+\hbox to 1\wd\fwbox{\hss{\eclmvtt``}}\TwoFwBoxes
+\hbox to 1\wd\fwbox{{\eclmvtt''}\hss}\verb|}\fixjfmspacing|%
+\hbox to 1\wd\fwbox{\hss{\eclmvtt``}}\TwoFwBoxes
+\hbox to 1\wd\fwbox{{\eclmvtt''}\hss}%
+\end{trivlist}
+If you are using plain \TeX, you should always add \verb|\fixjfmspacing| by
+yourself, because plain (*p)\TeX\ does not have \verb|\textmc|, \verb|\textgt|,
+or the like.
+
+Incidentally, if you are using \LaTeX\ and prefer the original (u)\pLaTeX\
+version of \verb|\textmc| and \verb|\textgt|, you can declare
+\begin{verbatim}
+    \UseStandardCJKTextFontCommands
+\end{verbatim}
+in your preamble. In contrast,
+\begin{verbatim}
+    \UseFixJFMCJKTextFontCommands
+\end{verbatim}
+redefines \verb|\textmc| and \verb|\textgt| and is declared by default. These
+two commands can only be used in preamble.
+
+\section{Advanced usage}
+
+The spacing between two consecutive fullwidth punctuation marks is produced by
+a glue item specified in the corresponding JFM file. However, if the font is
+changed there, the JFM format cannot work correctly, so this package puts
+another glue item there to adjust the spacing. The natural width of the new glue
+item is calculated according to the corresponding JFM file, so you need not
+worry about it. However, the stretch and shrink components cannot be extracted
+from JFM, so the following two commands are provided:
+\begin{verbatim}
+    \SetFixJFMSpacingStretch
+    \SetFixJFMSpacingShrink
+\end{verbatim}
+They expect an argument specifying how much space to stretch and shrink
+respectively. This package sets both of them to \verb|0.05zw| by default.
+
+Macro writers may want to (re)define commands like the \pkg{fixjfm} version of
+\verb|\textmc| and \verb|\textgt| for CJK fonts, thus the following command is
+provided:
+\begin{verbatim}
+    \DeclareFixJFMCJKTextFontCommand
+\end{verbatim}
+It is similar to \LaTeX's \verb|\DeclareTextFontCommand|. For example,
+\verb|\textmc| is redefined by this package as follows:
+\begin{verbatim}
+    \DeclareFixJFMCJKTextFontCommand\textmc{\mcfamily}
+\end{verbatim}
+and \verb|\textgt| is similar.
+
+Finally, there are several macros that may be useful for \TeX nicians:
+\begin{verbatim}
+    \FixJFMSpacing
+    \fixjfmparindent
+    \FixJFMParindent
+    \EveryparPreHook
+    \EveryparPostHook
+\end{verbatim}
+They are worthless for ordinary use. If you are interested in them, please have
+a look at the source code.
+
+\section{Compatibility}
+
+The \LaTeX-only package \pkg{bxjaprnind} also focuses on the first bug mentioned
+above. It provides some additional functionalities and also supports some other
+\TeX\ engines. This package can be used together with \pkg{bxjaprnind}, but
+please note that if you prefer \pkg{bxjaprnind}, you have to load it before this
+package, and vice versa, in case both of them are loaded.
+
+\section{Acknowledgements}
+
+The source code of this package is mostly taken from\footnote{This package also
+improves the code slightly.} (in alphabetical order):
+\epTeX\ Wiki (Hironori Kitagawa):
+\begin{verbatim}
+    https://ja.osdn.net/projects/eptex/wiki/lastnodechar
+\end{verbatim}
+\pkg{everyhook} (Stephen Checkoway):
+\begin{verbatim}
+    https://ctan.org/pkg/everyhook
+\end{verbatim}
+\pkg{jsclasses} (Haruhiko Okumura et al.):
+\begin{verbatim}
+    https://ctan.org/pkg/jsclasses
+\end{verbatim}
+and \pkg{platex} (Kazuki Maeda \& Japanese \TeX\ Development Community):
+\begin{verbatim}
+    https://ctan.org/pkg/platex
+\end{verbatim}
+Many thanks to the authors of these packages.
+
+\end{document}
