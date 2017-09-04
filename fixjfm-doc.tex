@@ -78,7 +78,7 @@
   \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
   \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
 \author{Yue \textsc{Zhang}}
-\date{2017-09-04\quad v0.3a}
+\date{2017-09-04\quad v0.4}
 
 \maketitle
 
@@ -203,11 +203,17 @@ two commands are important. Consider the following example:
 \item\relax{\ttfamily\hskip2em}\verb|\textgt{\Large |\TwoFwBoxes\verb|}|
 \end{trivlist}
 It causes a fatal error when the \pkg{fixjfm} version of \verb|\textgt| is used.
-The solution is to change \verb|\textgt| back to the standard version (probably
-locally):
-\begin{trivlist}
+The solution is to change \verb|\textgt| back to the standard version either
+globally or locally:
+\begin{trivlist}\itemsep=0pt\relax\parsep=0pt\relax
 \item\relax{\ttfamily\hskip2em}%
-\verb|{\UseStandardCJKTextFontCommands\textgt{\Large |\TwoFwBoxes\verb|}}|
+\verb|\UseFixJFMCJKTextFontCommands   \textgt{|\TwoFwBoxes\verb|}|
+\item\relax{\ttfamily\hskip2em}%
+\verb|\UseStandardCJKTextFontCommands \textgt{\Large |\TwoFwBoxes\verb|}|
+\item\relax{\ttfamily\hskip2em}%
+\verb|\UseFixJFMCJKTextFontCommands   \textgt{|\TwoFwBoxes\verb|}|
+\item\relax{\ttfamily\hskip1.5em}%
+\verb|{\UseStandardCJKTextFontCommands \textgt{\Large |\TwoFwBoxes\verb|}}|
 \end{trivlist}
 
 \section{Advanced usage}
@@ -304,8 +310,11 @@ Thanks to Hironobu Yamashita for suggesting all these changes:
     https://github.com/Man-Ting-Fang/fixjfm/pull/1
 \end{verbatim}
 
-\begin{history}{2017-09-04 v0.3a}
-\item Bug fix.
+\begin{history}{2017-09-04 v0.4}
+\item Bug fix, thanks to Hironobu Yamashita:
 \end{history}
+\begin{verbatim}
+    https://github.com/Man-Ting-Fang/fixjfm/pull/2
+\end{verbatim}
 
 \end{document}
