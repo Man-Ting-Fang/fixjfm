@@ -68,18 +68,23 @@
 
 \font\sans=SourceSansPro-Semibold-tlf-ot1 at 10pt
 
+\newenvironment{history}[1]%
+  {\noindent\textbf{#1}\begin{itemize}}%
+  {\end{itemize}}
+
 \begin{document}
 
 \title{The \pkg{fixjfm} package%
   \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
   \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
 \author{Yue \textsc{Zhang}}
-\date{2017-09-02\quad v0.2}
+\date{2017-09-04\quad v0.3}
 
 \maketitle
 
 \begin{abstract}
-This package fixes several bugs in the JFM format.
+This package fixes several bugs in the JFM format. Both \LaTeX\ and plain \TeX\
+are supported.
 \end{abstract}
 
 \section{Introduction}
@@ -182,17 +187,28 @@ If you are using plain \TeX, you should always add \verb|\fixjfmspacing| by
 yourself, because plain (*p)\TeX\ does not have \verb|\textmc|, \verb|\textgt|,
 or the like.
 
-Incidentally, if you are using \LaTeX\ and prefer the original (u)\pLaTeX\
-version of \verb|\textmc| and \verb|\textgt|, you can declare
+If you are using \LaTeX\ and prefer the standard version\footnote{Since v0.3,
+the ``standard version'' is similar to \pkg{jsclasses} and \pkg{BXjscls} rather
+than (u)\pLaTeX.} of \verb|\textmc| and \verb|\textgt|, you can declare
 \begin{verbatim}
     \UseStandardCJKTextFontCommands
 \end{verbatim}
-in your preamble. In contrast,
+In contrast,
 \begin{verbatim}
     \UseFixJFMCJKTextFontCommands
 \end{verbatim}
 redefines \verb|\textmc| and \verb|\textgt| and is declared by default. These
-two commands can only be used in preamble.
+two commands are important. Consider the following example:
+\begin{trivlist}
+\item\relax{\ttfamily\hskip2em}\verb|\textgt{\Large |\TwoFwBoxes\verb|}|
+\end{trivlist}
+It causes a fatal error when the \pkg{fixjfm} version of \verb|\textgt| is used.
+The solution is to change \verb|\textgt| back to the standard version (probably
+locally):
+\begin{trivlist}
+\item\relax{\ttfamily\hskip2em}%
+\verb|{\UseStandardCJKTextFontCommands\textgt{\Large |\TwoFwBoxes\verb|}}|
+\end{trivlist}
 
 \section{Advanced usage}
 
@@ -221,7 +237,12 @@ It is similar to \LaTeX's \verb|\DeclareTextFontCommand|. For example,
 \begin{verbatim}
     \DeclareFixJFMCJKTextFontCommand\textmc{\mcfamily}
 \end{verbatim}
-and \verb|\textgt| is similar.
+and \verb|\textgt| is similar. In contrast,
+\begin{verbatim}
+    \DeclareStandardCJKTextFontCommand
+\end{verbatim}
+(re)defines a CJK text font command like the standard version of \verb|\textmc|
+and \verb|\textgt|.
 
 Finally, there are several macros that may be useful for \TeX nicians:
 \begin{verbatim}
@@ -263,5 +284,24 @@ and \pkg{platex} (Kazuki Maeda \& Japanese \TeX\ Development Community):
     https://ctan.org/pkg/platex
 \end{verbatim}
 Many thanks to the authors of these packages.
+
+\section{History}
+
+\begin{history}{2017-09-02 v0.2}
+\item First public version.
+\end{history}
+
+\begin{history}{2017-09-04 v0.3}
+\item Fixes.
+\item Make \verb|\UseFixJFMCJKTextFontCommands| and
+  \verb|\UseStandardCJKTextFontCommands| also available after
+  \verb|\begin{document}|.
+  \item Add \verb|\DeclareStandardCJKTextFontCommand| and use it for redefining
+    the standard version of \verb|\textmc| and \verb|\textgt|.
+\end{history}
+Thanks to Hironobu Yamashita for suggesting all these changes:
+\begin{verbatim}
+    https://github.com/Man-Ting-Fang/fixjfm/pull/1
+\end{verbatim}
 
 \end{document}
