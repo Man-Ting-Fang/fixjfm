@@ -6,7 +6,7 @@ CTAN Homepage: https://ctan.org/pkg/fixjfm
 
 Repository: https://github.com/Man-Ting-Fang/fixjfm
 
-Version: 2017-09-04 v0.3a
+Version: 2017-09-04 v0.4
 
 Copyright 2017 Yue ZHANG
 
