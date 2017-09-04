@@ -104,7 +104,7 @@
   \else
     \def\DeclareFixJFMCJKTextFontCommand#1#2{%
       \DeclareRobustCommand#1[1]{%
-        \relax\ifmmode\nfss@text\fi{#2\fixjfmspacing##1}\fixjfmspacing}}%
+        \relax\ifmmode\expandafter\nfss@text\fi{#2\fixjfmspacing##1}\fixjfmspacing}}%
     \def\UseFixJFMCJKTextFontCommands{%
       \DeclareFixJFMCJKTextFontCommand\textmc{\mcfamily}%
       \DeclareFixJFMCJKTextFontCommand\textgt{\gtfamily}}%
