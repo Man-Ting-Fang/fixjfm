@@ -78,7 +78,7 @@
   \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
   \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
 \author{Yue \textsc{Zhang}}
-\date{2017-09-04\quad v0.3}
+\date{2017-09-04\quad v0.3a}
 
 \maketitle
 
@@ -227,8 +227,8 @@ They expect an argument specifying how much space to stretch and shrink
 respectively. This package sets both of them to \verb|0.05zw| by default.
 
 Macro writers may want to (re)define commands like the \pkg{fixjfm} version of
-\verb|\textmc| and \verb|\textgt| for CJK fonts, thus the following command is
-provided:
+\verb|\textmc| and \verb|\textgt| for CJK text fonts, thus the following command
+is provided:
 \begin{verbatim}
     \DeclareFixJFMCJKTextFontCommand
 \end{verbatim}
@@ -303,5 +303,9 @@ Thanks to Hironobu Yamashita for suggesting all these changes:
 \begin{verbatim}
     https://github.com/Man-Ting-Fang/fixjfm/pull/1
 \end{verbatim}
+
+\begin{history}{2017-09-04 v0.3a}
+\item Bug fix.
+\end{history}
 
 \end{document}
