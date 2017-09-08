@@ -78,7 +78,7 @@
   \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
   \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
 \author{Yue \textsc{Zhang}}
-\date{2017-09-04\quad v0.4}
+\date{2017-09-08\quad v0.4a}
 
 \maketitle
 
@@ -125,11 +125,11 @@ Font change & This package        & Input          & Output                  \\
 \end{tabular}
 \end{table}
 It seems that macro is the easiest solution to these problems. However, the
-second bug can only be fixed when using \e-(u)\pTeX\ (under most, but not all
-circumstances), because the primitive \verb|\lastnodechar| which is introduced
-by \epTeX\ is required. Anyhow, using this package with \pTeX\ or any one of its
-derivatives does not hurt. Please also keep in mind that owing to technical
-limitations, this package is not a panacea.
+second bug can only be fixed when using \e-(u)\pTeX\ or \ApTeX\ (under most, but
+not all circumstances), because the primitive \verb|\lastnodechar| which is
+introduced by \epTeX\ is required. Anyhow, using this package with \pTeX\ or any
+one of its derivatives does not hurt. Please also keep in mind that owing to
+technical limitations, this package is not a panacea.
 
 There is also another improvement: \verb|\leavevmode| is redefined as
 \verb|\quitvmode| if the latter is available as a primitive (among all *\pTeX\
@@ -188,7 +188,7 @@ yourself, because plain (*p)\TeX\ does not have \verb|\textmc|, \verb|\textgt|,
 or the like.
 
 If you are using \LaTeX\ and prefer the standard version\footnote{Since v0.3,
-the ``standard version'' is similar to \pkg{jsclasses} and \pkg{BXjscls} rather
+the ``standard version'' is similar to \pkg{jsclasses} and \pkg{bxjscls} rather
 than (u)\pLaTeX.} of \verb|\textmc| and \verb|\textgt|, you can declare
 \begin{verbatim}
     \UseStandardCJKTextFontCommands
