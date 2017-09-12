@@ -63,6 +63,7 @@
       \edef\fixjfm@sp@temp@tokens{\fixjfm@sp@temp@token}%
       \expandafter\fixjfm@@fixspacing\fixjfm@sp@temp@tokens\relax\fixjfm@sp@nil
       \ifnum\count0>-1\relax
+        \ifnum\count0<256\relax\hskip\xkanjiskip\else\hskip\kanjiskip\fi
         \setbox0=\hbox{%
           \inhibitglue\char\count0\relax\fixjfm@sp@temp@token\inhibitglue}%
         \setbox2=\hbox{%
