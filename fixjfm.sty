@@ -18,6 +18,8 @@
 
 \catcode`\@=11\relax
 
+% common utilities
+
 \def\fixjfm@ifprimitive#1{%
   \begingroup
     \edef\fixjfm@temp@meaning{\meaning#1}%
@@ -35,9 +37,43 @@
 
 \def\fixjfm@empty{}
 
+\begingroup
+  \let\CATCODE=\catcode
+  \let\RELAX=\relax
+  \let\GDEF=\gdef
+  \let\ENDGROUP=\endgroup
+  \CATCODE`\k=12\RELAX
+  \CATCODE`\a=12\RELAX
+  \CATCODE`\n=12\RELAX
+  \CATCODE`\j=12\RELAX
+  \CATCODE`\i=12\RELAX
+  \CATCODE`\c=12\RELAX
+  \CATCODE`\h=12\RELAX
+  \CATCODE`\r=12\RELAX
+  \CATCODE`\t=12\RELAX
+  \CATCODE`\e=12\RELAX
+  \GDEF\FIXJFM@KANJICHARACTER{kanji character }%
+\ENDGROUP
+
+\def\fixjfm@get@inhibitxspcode#1{%
+  \expandafter\expandafter\expandafter\fixjfm@@get@inhibitxspcode
+  \expandafter\meaning\expandafter#1\FIXJFM@KANJICHARACTER
+  \relax\fixjfm@nil}
+\expandafter\def\expandafter\fixjfm@@get@inhibitxspcode
+  \expandafter#\expandafter1\FIXJFM@KANJICHARACTER#2#3\fixjfm@nil{%
+  \count2=-1\relax
+  \def\fixjfm@temp@tokens{#1}%
+  \ifx\fixjfm@temp@tokens\fixjfm@empty
+    \count2=\inhibitxspcode`#2\relax
+  \fi}
+
+% \leavevmode
+
 \fixjfm@ifprimitive\quitvmode
   \let\leavevmode=\quitvmode
 \fi
+
+% \fixjfmspacing
 
 \def\fixjfmspacing{\FixJFMSpacing}
 
@@ -63,7 +99,13 @@
       \edef\fixjfm@sp@temp@tokens{\fixjfm@sp@temp@token}%
       \expandafter\fixjfm@@fixspacing\fixjfm@sp@temp@tokens\relax\fixjfm@sp@nil
       \ifnum\count0>-1\relax
-        \ifnum\count0<256\relax\hskip\xkanjiskip\else\hskip\kanjiskip\fi
+        \ifnum\count0<256\relax
+          \ifnum\xspcode\count0>1\relax \ifnum\count2>1\relax
+            \hskip\xkanjiskip
+          \fi \fi
+        \else
+          \hskip\kanjiskip
+        \fi
         \setbox0=\hbox{%
           \inhibitglue\char\count0\relax\fixjfm@sp@temp@token\inhibitglue}%
         \setbox2=\hbox{%
@@ -74,6 +116,7 @@
       \fi
     \endgroup}%
   \long\def\fixjfm@@fixspacing#1#2\fixjfm@sp@nil{%
+    \count2=1\relax
     \ifcat#1\fixjfm@kanji
     \else
       \ifcat#1\fixjfm@kana
@@ -81,8 +124,12 @@
         \ifcat#1\fixjfm@other
         \else
           \count0=-1\relax
+          \count2=0\relax
         \fi
       \fi
+    \fi
+    \ifnum\count2>0\relax
+      \fixjfm@get@inhibitxspcode#1\relax
     \fi}%
   \def\SetFixJFMSpacingStretch#1{\def\fixjfm@temp@hskip@stretch{#1}}%
   \def\SetFixJFMSpacingShrink#1{\def\fixjfm@temp@hskip@shrink{#1}}%
@@ -120,11 +167,15 @@
     \UseFixJFMCJKTextFontCommands
   \fi
 
+% \inhibitglue
+
 \fixjfm@ifprimitive\protected
   \protected\def\<{\ifvmode\leavevmode\fi\inhibitglue}%
 \else
   \def\<{\inhibitglue}%
 \fi
+
+% \fixjfmparindent
 
 \def\fixjfmparindent{\FixJFMParindent}
 
@@ -139,39 +190,11 @@
   \fi
 \endgroup
 
-\begingroup
-  \let\CATCODE=\catcode
-  \let\RELAX=\relax
-  \let\GDEF=\gdef
-  \let\ENDGROUP=\endgroup
-  \CATCODE`\k=12\RELAX
-  \CATCODE`\a=12\RELAX
-  \CATCODE`\n=12\RELAX
-  \CATCODE`\j=12\RELAX
-  \CATCODE`\i=12\RELAX
-  \CATCODE`\c=12\RELAX
-  \CATCODE`\h=12\RELAX
-  \CATCODE`\r=12\RELAX
-  \CATCODE`\t=12\RELAX
-  \CATCODE`\e=12\RELAX
-  \GDEF\FIXJFM@KANJICHARACTER{kanji character }%
-\ENDGROUP
-
 \def\FixJFMParindent{\futurelet\fixjfm@pi@temp@token\fixjfm@fixparindent}
 
 \def\fixjfm@fixparindent{%
-  \expandafter\expandafter\expandafter\fixjfm@@fixparindent
-    \expandafter\meaning\expandafter\fixjfm@pi@temp@token
-    \FIXJFM@KANJICHARACTER\relax\fixjfm@pi@nil}
-
-\expandafter\def\expandafter\fixjfm@@fixparindent
-  \expandafter#\expandafter1\FIXJFM@KANJICHARACTER#2#3\fixjfm@pi@nil{%
-    \def\fixjfm@pi@temp@tokens{#1}%
-    \ifx\fixjfm@pi@temp@tokens\fixjfm@empty
-      \ifnum\the\inhibitxspcode`#2=2\relax
-        \inhibitglue
-      \fi
-    \fi}
+  \fixjfm@get@inhibitxspcode\fixjfm@pi@temp@token
+  \ifnum\count2=2\relax\inhibitglue\fi}
 
 \begingroup\expandafter\expandafter\expandafter\endgroup
   \expandafter\ifx\csname PushPostHook\endcsname\relax % everyhook.sty
