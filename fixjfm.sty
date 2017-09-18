@@ -92,6 +92,33 @@
     \xdef\fixjfm@kana{\kansuji2}%
     \xdef\fixjfm@other{\kansuji3}%
   \endgroup
+  \newif\iffixjfm@sp@status@
+  \def\fixjfm@ifautospacing{%
+    \fixjfm@sp@status@false
+    \begingroup
+      \kanjiskip10pt
+      % current setting
+      \setbox0=\hbox{\fixjfm@kanji\fixjfm@kanji\fixjfm@kanji}\dimen4\wd0
+      % force \noautospacing
+      \noautospacing
+      \setbox0=\hbox{\fixjfm@kanji\fixjfm@kanji\fixjfm@kanji}\dimen2\wd0
+      \expandafter
+    \endgroup
+    \ifdim\dimen4>\dimen2\relax \fixjfm@sp@status@true \fi}
+  \def\fixjfm@ifautoxspacing{%
+    \fixjfm@sp@status@false
+    \begingroup
+      \xspcode`A=3\relax
+      \inhibitxspcode`漢=3\relax
+      \xkanjiskip20pt
+      % current setting
+      \setbox0=\hbox{\fixjfm@kanji A\fixjfm@kanji}\dimen4\wd0
+      % force \noautoxspacing
+      \noautoxspacing
+      \setbox0=\hbox{\fixjfm@kanji A\fixjfm@kanji}\dimen2\wd0
+      \expandafter
+    \endgroup
+    \ifdim\dimen4>\dimen2\relax \fixjfm@sp@status@true \fi}
   \def\FixJFMSpacing{\futurelet\fixjfm@sp@temp@token\fixjfm@fixspacing}%
   \def\fixjfm@fixspacing{%
     \begingroup
@@ -101,10 +128,10 @@
       \ifnum\count0>-1\relax
         \ifnum\count0<256\relax
           \ifnum\xspcode\count0>1\relax \ifnum\count2>1\relax
-            \hskip\xkanjiskip
+            \fixjfm@ifautoxspacing \iffixjfm@sp@status@\hskip\xkanjiskip\fi
           \fi \fi
         \else
-          \hskip\kanjiskip
+          \fixjfm@ifautospacing \iffixjfm@sp@status@\hskip\kanjiskip\fi
         \fi
         \setbox0=\hbox{%
           \inhibitglue\char\count0\relax\fixjfm@sp@temp@token\inhibitglue}%
