@@ -11,7 +11,7 @@
 \begingroup\expandafter\expandafter\expandafter\endgroup
   \expandafter\ifx\csname ProvidesPackage\endcsname\relax
   \else
-    \ProvidesPackage{fixjfm}[2017/09/12 v0.5 Fix JFM (for *pTeX)]%
+    \ProvidesPackage{fixjfm}[2017/09/21 v0.6 Fix JFM (for *pTeX)]%
   \fi
 
 \edef\FIXJFMDOTSTYRESTORECATCODE{\catcode`\noexpand\@=\the\catcode`\@\relax}
@@ -57,15 +57,15 @@
 
 \def\fixjfm@get@inhibitxspcode#1{%
   \expandafter\expandafter\expandafter\fixjfm@@get@inhibitxspcode
-  \expandafter\meaning\expandafter#1\FIXJFM@KANJICHARACTER
-  \relax\fixjfm@nil}
+    \expandafter\meaning\expandafter#1\FIXJFM@KANJICHARACTER\relax\fixjfm@nil}
+
 \expandafter\def\expandafter\fixjfm@@get@inhibitxspcode
   \expandafter#\expandafter1\FIXJFM@KANJICHARACTER#2#3\fixjfm@nil{%
-  \count2=-1\relax
-  \def\fixjfm@temp@tokens{#1}%
-  \ifx\fixjfm@temp@tokens\fixjfm@empty
-    \count2=\inhibitxspcode`#2\relax
-  \fi}
+    \count2=-1\relax
+    \def\fixjfm@temp@tokens{#1}%
+    \ifx\fixjfm@temp@tokens\fixjfm@empty
+      \count2=\inhibitxspcode`#2\relax
+    \fi}
 
 % \leavevmode
 
@@ -92,33 +92,37 @@
     \xdef\fixjfm@kana{\kansuji2}%
     \xdef\fixjfm@other{\kansuji3}%
   \endgroup
-  \newif\iffixjfm@sp@status@
+  \csname newif\expandafter\endcsname\csname iffixjfm@sp@status@\endcsname
   \def\fixjfm@ifautospacing{%
     \fixjfm@sp@status@false
     \begingroup
-      \kanjiskip10pt
-      % current setting
-      \setbox0=\hbox{\fixjfm@kanji\fixjfm@kanji\fixjfm@kanji}\dimen4\wd0
-      % force \noautospacing
+      \kanjiskip=10pt\relax
+      \setbox0=\hbox{\fixjfm@kanji\fixjfm@kanji\fixjfm@kanji}%
+      \dimen4=\wd0\relax
       \noautospacing
-      \setbox0=\hbox{\fixjfm@kanji\fixjfm@kanji\fixjfm@kanji}\dimen2\wd0
+      \setbox0=\hbox{\fixjfm@kanji\fixjfm@kanji\fixjfm@kanji}%
+      \dimen2=\wd0\relax
       \expandafter
     \endgroup
-    \ifdim\dimen4>\dimen2\relax \fixjfm@sp@status@true \fi}
+    \ifdim\dimen4>\dimen2\relax
+      \fixjfm@sp@status@true
+    \fi}
   \def\fixjfm@ifautoxspacing{%
     \fixjfm@sp@status@false
     \begingroup
-      \xspcode`A=3\relax
+      \xspcode`\A=3\relax
       \inhibitxspcode\sjis"8ABF=3\relax % U+6F22: Kanji Han
-      \xkanjiskip20pt
-      % current setting
-      \setbox0=\hbox{\fixjfm@kanji A\fixjfm@kanji}\dimen4\wd0
-      % force \noautoxspacing
+      \xkanjiskip=20pt\relax
+      \setbox0=\hbox{\fixjfm@kanji A\fixjfm@kanji}%
+      \dimen4=\wd0\relax
       \noautoxspacing
-      \setbox0=\hbox{\fixjfm@kanji A\fixjfm@kanji}\dimen2\wd0
+      \setbox0=\hbox{\fixjfm@kanji A\fixjfm@kanji}%
+      \dimen2=\wd0\relax
       \expandafter
     \endgroup
-    \ifdim\dimen4>\dimen2\relax \fixjfm@sp@status@true \fi}
+    \ifdim\dimen4>\dimen2\relax
+      \fixjfm@sp@status@true
+    \fi}
   \def\FixJFMSpacing{\futurelet\fixjfm@sp@temp@token\fixjfm@fixspacing}%
   \def\fixjfm@fixspacing{%
     \begingroup
@@ -127,11 +131,19 @@
       \expandafter\fixjfm@@fixspacing\fixjfm@sp@temp@tokens\relax\fixjfm@sp@nil
       \ifnum\count0>-1\relax
         \ifnum\count0<256\relax
-          \ifnum\xspcode\count0>1\relax \ifnum\count2>1\relax
-            \fixjfm@ifautoxspacing \iffixjfm@sp@status@\hskip\xkanjiskip\fi
-          \fi \fi
+          \ifnum\xspcode\count0>1\relax
+            \ifnum\count2>1\relax
+              \fixjfm@ifautoxspacing
+              \iffixjfm@sp@status@
+                \hskip\xkanjiskip
+              \fi
+            \fi
+          \fi
         \else
-          \fixjfm@ifautospacing \iffixjfm@sp@status@\hskip\kanjiskip\fi
+          \fixjfm@ifautospacing
+          \iffixjfm@sp@status@
+            \hskip\kanjiskip
+          \fi
         \fi
         \setbox0=\hbox{%
           \inhibitglue\char\count0\relax\fixjfm@sp@temp@token\inhibitglue}%
@@ -139,7 +151,7 @@
           \inhibitglue\char\count0 \fixjfm@sp@temp@token\inhibitglue}%
         \dimen0=\wd2\relax
         \advance\dimen0 by -\wd0\relax
-        \fixjfm@temp@hskip\relax
+        \fixjfm@temp@hskip
       \fi
     \endgroup}%
   \long\def\fixjfm@@fixspacing#1#2\fixjfm@sp@nil{%
@@ -220,8 +232,10 @@
 \def\FixJFMParindent{\futurelet\fixjfm@pi@temp@token\fixjfm@fixparindent}
 
 \def\fixjfm@fixparindent{%
-  \fixjfm@get@inhibitxspcode\fixjfm@pi@temp@token
-  \ifnum\count2=2\relax\inhibitglue\fi}
+  \begingroup
+    \fixjfm@get@inhibitxspcode\fixjfm@pi@temp@token
+    \ifnum\count2=2\relax\inhibitglue\fi
+  \endgroup}
 
 \begingroup\expandafter\expandafter\expandafter\endgroup
   \expandafter\ifx\csname PushPostHook\endcsname\relax % everyhook.sty
