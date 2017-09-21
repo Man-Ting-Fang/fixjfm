@@ -106,7 +106,7 @@
     \endgroup
     \ifdim\dimen4>\dimen2\relax
       \fixjfm@sp@status@true
-    \fi}
+    \fi}%
   \def\fixjfm@ifautoxspacing{%
     \fixjfm@sp@status@false
     \begingroup
@@ -122,7 +122,7 @@
     \endgroup
     \ifdim\dimen4>\dimen2\relax
       \fixjfm@sp@status@true
-    \fi}
+    \fi}%
   \def\FixJFMSpacing{\futurelet\fixjfm@sp@temp@token\fixjfm@fixspacing}%
   \def\fixjfm@fixspacing{%
     \begingroup
