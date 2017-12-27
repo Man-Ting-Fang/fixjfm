@@ -11,7 +11,7 @@
 \begingroup\expandafter\expandafter\expandafter\endgroup
   \expandafter\ifx\csname ProvidesPackage\endcsname\relax
   \else
-    \ProvidesPackage{fixjfm}[2017/09/21 v0.6 Fix JFM (for *pTeX)]%
+    \ProvidesPackage{fixjfm}[2017/12/27 v0.7 Fix JFM (for *pTeX)]%
   \fi
 
 \edef\FIXJFMDOTSTYRESTORECATCODE{\catcode`\noexpand\@=\the\catcode`\@\relax}
@@ -183,6 +183,9 @@
   \def\SetFixJFMSpacingShrink#1{}%
 \fi
 
+\newif\ifUseFixJFMCJKTextFontCommands
+\newif\ifUseStandardCJKTextFontCommands
+
 \begingroup\expandafter\expandafter\expandafter\endgroup
   \expandafter\ifx\csname DeclareTextFontCommand\endcsname\relax
     \def\DeclareFixJFMCJKTextFontCommand#1#2{}%
@@ -198,9 +201,13 @@
       \DeclareRobustCommand#1[1]{%
         \relax\ifmmode\expandafter\nfss@text\fi{#2##1}}}%
     \def\UseFixJFMCJKTextFontCommands{%
+      \UseFixJFMCJKTextFontCommandstrue
+      \UseStandardCJKTextFontCommandsfalse
       \DeclareFixJFMCJKTextFontCommand\textmc{\mcfamily}%
       \DeclareFixJFMCJKTextFontCommand\textgt{\gtfamily}}%
     \def\UseStandardCJKTextFontCommands{%
+      \UseStandardCJKTextFontCommandstrue
+      \UseFixJFMCJKTextFontCommandsfalse
       \DeclareStandardCJKTextFontCommand\textmc{\mcfamily}%
       \DeclareStandardCJKTextFontCommand\textgt{\gtfamily}}%
     \UseFixJFMCJKTextFontCommands
