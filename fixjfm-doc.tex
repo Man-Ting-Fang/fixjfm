@@ -19,6 +19,8 @@
 
 \AtBeginEnvironment{verbatim}{\microtypesetup{activate=false}}
 
+\abovetopsep=\medskipamount
+
 \newcommand\NormalSans{\normalfont\sffamily}
 \newcommand\pkg[1]{{\protect\NormalSans#1}}
 
@@ -78,7 +80,7 @@
   \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
   \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
 \author{Yue \textsc{Zhang}}
-\date{2017-09-21\quad v0.6}
+\date{2017-12-27\quad v0.7}
 
 \maketitle
 
@@ -98,18 +100,17 @@ there are still at least two bugs:
 \item Bug 2: the spacing between two consecutive fullwidth punctuation marks
   cannot be adjusted if the font is changed there, see Table \ref{tab:adj}.
 \end{itemize}
-\begin{figure}[ht]\centering
+\begin{figure}[!ht]\centering
 \demotext{3}\demotext{2.5}
 \caption{Comparison of the indentation produced without this package (left) and
   with this package (right)}
 \label{fig:ind}
 \end{figure}
 \vskip-20pt\relax
-\begin{table}[ht]\centering
+\begin{table}[!ht]\centering
 \caption{Comparison of the adjustment of the spacing between two consecutive
   fullwidth punctuation marks}
 \label{tab:adj}
-\medskip
 \begin{tabular}{ccll}
 \toprule
 Font change & This package        & Input          & Output                  \\
@@ -257,6 +258,8 @@ Finally, there are several macros that may be useful for \TeX nicians:
     \FixJFMParindent
     \EveryparPreHook
     \EveryparPostHook
+    \ifUseFixJFMCJKTextFontCommands
+    \ifUseStandardCJKTextFontCommands
 \end{verbatim}
 They are worthless for ordinary use. If you are interested in them, please have
 a look at the source code.
@@ -331,5 +334,10 @@ Thanks to Hironobu Yamashita for suggesting all these changes:
 \begin{verbatim}
     https://github.com/Man-Ting-Fang/fixjfm/pull/4
 \end{verbatim}
+
+\begin{history}{2017-12-27 v0.7}
+\item Add \verb|\ifUseFixJFMCJKTextFontCommands| and
+  \verb|\ifUseStandardCJKTextFontCommands|.
+\end{history}
 
 \end{document}
