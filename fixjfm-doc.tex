@@ -80,7 +80,7 @@
   \thanks{CTAN Homepage: \texttt{https://ctan.org/pkg/fixjfm}}
   \thanks{Repository: \texttt{https://github.com/Man-Ting-Fang/fixjfm}}}
 \author{Yue \textsc{Zhang}}
-\date{2017-12-27\quad v0.7}
+\date{2018-03-24\quad v0.8}
 
 \maketitle
 
@@ -249,7 +249,16 @@ and \verb|\textgt| is similar. In contrast,
     \DeclareStandardCJKTextFontCommand
 \end{verbatim}
 (re)defines a CJK text font command like the standard version of \verb|\textmc|
-and \verb|\textgt|.
+and \verb|\textgt|. But there is a more convenient way: Suppose that you have a
+new CJK text font command \verb|\xyfamily|, then
+\begin{verbatim}
+    \AppendToUseXCJKTextFontCommands{\textxy}{\xyfamily}
+\end{verbatim}
+will do all you need and makes \verb|\Use...CJKTextFontCommands| also apply to
+\verb|\textxy|. This command and \verb|\Use...CJKTextFontCommands| can be given
+in any order, so you do not need to redeclare
+\verb|\UseFixJFMCJKTextFontCommands| (which is the default behaviour) if that is
+what you want.
 
 Finally, there are several macros that may be useful for \TeX nicians:
 \begin{verbatim}
@@ -338,6 +347,10 @@ Thanks to Hironobu Yamashita for suggesting all these changes:
 \begin{history}{2017-12-27 v0.7}
 \item Add \verb|\ifUseFixJFMCJKTextFontCommands| and
   \verb|\ifUseStandardCJKTextFontCommands|.
+\end{history}
+
+\begin{history}{2018-03-24 v0.8}
+\item Add \verb|\AppendToUseXCJKTextFontCommands|.
 \end{history}
 
 \end{document}
