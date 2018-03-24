@@ -1,7 +1,7 @@
 
 
 % fixjfm.sty
-% Copyright 2017 Yue ZHANG
+% Copyright 2017--2018 Yue ZHANG
 % License: Knuth License (https://ctan.org/license/knuth)
 
 \csname ENDINPUTFIXJFMDOTSTY\endcsname
@@ -192,6 +192,7 @@
     \def\DeclareStandardCJKTextFontCommand#1#2{}%
     \let\UseFixJFMCJKTextFontCommands=\fixjfm@empty
     \let\UseStandardCJKTextFontCommands=\fixjfm@empty
+    \def\AppendToUseXCJKTextFontCommands#1#2{}%
   \else
     \def\DeclareFixJFMCJKTextFontCommand#1#2{%
       \DeclareRobustCommand#1[1]{%
@@ -210,6 +211,16 @@
       \UseFixJFMCJKTextFontCommandsfalse
       \DeclareStandardCJKTextFontCommand\textmc{\mcfamily}%
       \DeclareStandardCJKTextFontCommand\textgt{\gtfamily}}%
+    \def\AppendToUseXCJKTextFontCommands#1#2{%
+      \g@addto@macro\UseFixJFMCJKTextFontCommands{%
+        \DeclareFixJFMCJKTextFontCommand#1{#2}}%
+      \g@addto@macro\UseStandardCJKTextFontCommands{%
+        \DeclareStandardCJKTextFontCommand#1{#2}}%
+      \ifUseFixJFMCJKTextFontCommands
+        \DeclareFixJFMCJKTextFontCommand#1{#2}%
+      \else
+        \DeclareStandardCJKTextFontCommand#1{#2}%
+      \fi}%
     \UseFixJFMCJKTextFontCommands
   \fi
 
