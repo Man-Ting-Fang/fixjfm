@@ -75,7 +75,8 @@
 
 % \fixjfmspacing
 
-\def\fixjfmspacing{\FixJFMSpacing}
+% \def\fixjfmspacing{\FixJFMSpacing}
+\def\fixjfmspacing{\expandafter\FixJFMSpacingFullExpand\romannumeral-`\Q}
 
 \newif\iffixjfm@lastnodechar@available@
 
@@ -124,6 +125,7 @@
       \fixjfm@sp@status@true
     \fi}%
   \def\FixJFMSpacing{\futurelet\fixjfm@sp@temp@token\fixjfm@fixspacing}%
+  \def\FixJFMSpacingFullExpand{\expandafter\futurelet\expandafter\fixjfm@sp@temp@token\expandafter\fixjfm@fixspacing\romannumeral-`\Q}%
   \def\fixjfm@fixspacing{%
     \begingroup
       \count0=\lastnodechar
